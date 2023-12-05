@@ -1,3 +1,4 @@
+from flask import Flask, request, jsonify
 from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
 from ibapi.contract import Contract
@@ -5,94 +6,147 @@ from ibapi.order import Order
 import threading
 import time
 
+app = Flask(__name__)
 
+
+# TestApp for interacting with TWS API
 class TestApp(EWrapper, EClient):
     def __init__(self):
         EClient.__init__(self, self)
+        self.nextOrderId = None
+        self.order_responses = []
+        self.accountValues = {}
+        self.positions = {}
 
     def error(self, reqId, errorCode, errorString, advancedOrderRejectJson=None):
         print("Error: ", reqId, " ", errorCode, " ", errorString, " ", advancedOrderRejectJson)
 
-    def nextValidId(self, orderId: int):
-        self.nextOrderId = orderId
-        self.start()
-
-    def accountSummary(self, reqId, account, tag, value, currency):
-        """ This method is called to report an account summary """
-        print("Account:", account, "Tag:", tag, "Value:", value, "Currency:", currency)
-        if tag == "TotalCashValue":
-            print(f"Total Cash Value: {value} {currency}")
-
-    def accountSummaryEnd(self, reqId):
-        """ This method is called after all account summary data for a request are received """
-        print("Account summary retrieval complete.")
-        self.disconnect()
-
-    def place_order(self, symbol, action, quantity):
-        contract = Contract()
-        contract.symbol = symbol
-        contract.secType = "STK"
-        contract.exchange = "SMART"
-        contract.currency = "USD"
-
-        order = Order()
-        order.action = action
-        order.totalQuantity = quantity
-        order.orderType = "MKT"  # Market order
-
-        self.placeOrder(self.nextOrderId, contract, order)
-        self.nextOrderId += 1
-
-    def start(self):
-        contract = Contract()
-        contract.symbol = "AAPL"
-        contract.secType = "STK"
-        contract.exchange = "SMART"
-        contract.currency = "USD"
-
-        order = Order()
-        order.action = "BUY"
-        order.totalQuantity = 1
-        order.orderType = "LMT"
-        order.lmtPrice = 100
-
-        self.placeOrder(self.nextOrderId, contract, order)
-        self.nextOrderId += 1
-
-        time.sleep(3)
-        self.disconnect()
+    def updateAccountValue(self, key: str, val: str, currency: str, accountName: str):
+        self.accountValues[key] = {"value": val, "currency": currency, "account": accountName}
 
     def position(self, account, contract, position, avgCost):
-        """ This method is called to report a position in an account """
-        print("Account:", account, "Contract:", contract.symbol, "Position:", position, "Average Cost:", avgCost)
+        self.positions[contract.symbol] = {"position": position, "avgCost": avgCost}
 
-    def positionEnd(self):
-        """ This method is called after all position data for a request are received """
-        print("Position data retrieval complete.")
-        self.disconnect()
+    def nextValidId(self, orderId: int):
+        self.nextOrderId = orderId
+
+    def orderStatus(self, orderId, status, filled, remaining, avgFillPrice, permId,
+                    parentId, lastFillPrice, clientId, whyHeld, mktCapPrice):
+        self.order_responses.append({
+            "orderId": orderId,
+            "status": status,
+            "filled": filled,
+            "remaining": remaining,
+            "avgFillPrice": avgFillPrice
+        })
 
 
-def main():
-    app = TestApp()
-    app.connect("127.0.0.1", 7496, 0)
+# Global instance of your TestApp
+ib_app = TestApp()
+api_thread = None
 
-    # Start a separate thread to run the communication loop
-    api_thread = threading.Thread(target=app.run, daemon=True)
+
+@app.route('/config/set', methods=['GET'])
+def set_config():
+    global ib_app, api_thread
+    ip = request.args.get('ip', default="127.0.0.1")
+    port = request.args.get('port', default=7496, type=int)
+    clientId = request.args.get('clientId', default=0, type=int)
+
+    if not api_thread is None:
+        ib_app.disconnect()
+        api_thread.join()
+
+    ib_app = TestApp()
+    ib_app.connect(ip, port, clientId)
+
+    api_thread = threading.Thread(target=ib_app.run, daemon=True)
     api_thread.start()
+    time.sleep(1)  # Allow time for connection to establish
 
-    # Wait for connection to establish
-    time.sleep(1)
+    return jsonify({"status": "success", "message": "Configuration set and connected"})
+
+
+@app.route('/account/balance', methods=['GET'])
+def account_balance():
+    global ib_app
+    if ib_app is None or ib_app.nextOrderId is None:
+        return jsonify({"error": "Not connected to TWS"})
+
+    # Request account values
+    ib_app.reqAccountUpdates(True, "")
+
+    # Add a delay or implement a more sophisticated method to wait for the response
+    time.sleep(3)
+
+    # Stop the account updates
+    ib_app.reqAccountUpdates(False, "")
+
+    # Return the account values
+    return jsonify(ib_app.accountValues)
+
+
+@app.route('/account/positions', methods=['GET'])
+def account_summary():
+    global ib_app
+    if ib_app is None or ib_app.nextOrderId is None:
+        return jsonify({"error": "Not connected to TWS"})
 
     # Request positions
-    # app.reqPositions()
+    ib_app.reqPositions()
 
-    # Request account summary
-    # The request ID can be any number, and the "All" parameter specifies that we want all accounts
-    # app.reqAccountSummary(1, "All", "$LEDGER")
+    # Add a delay or implement a more sophisticated method to wait for the response
+    time.sleep(3)
 
-    while api_thread.is_alive():
-        time.sleep(1)
+    # Return the positions
+    return jsonify(ib_app.positions)
 
 
-if __name__ == "__main__":
-    main()
+@app.route('/contract/<action>', methods=['GET'])
+def trade_contract(action):
+    global ib_app
+    if action not in ['buy', 'sell']:
+        return jsonify({"error": "Invalid action"})
+
+    if ib_app is None or ib_app.nextOrderId is None:
+        return jsonify({"error": "Not connected to TWS"})
+
+    symbol = request.args.get('symbol')
+    secType = request.args.get('secType', 'STK')
+    exchange = request.args.get('exchange', 'SMART')
+    currency = request.args.get('currency', 'USD')
+    totalQuantity = int(request.args.get('totalQuantity', 1))
+    orderType = request.args.get('orderType', 'MKT')
+    lmtPrice = float(request.args.get('lmtPrice', 0))
+
+    contract = Contract()
+    contract.symbol = symbol
+    contract.secType = secType
+    contract.exchange = exchange
+    contract.currency = currency
+
+    order = Order()
+    order.action = "BUY" if action == 'buy' else "SELL"
+    order.totalQuantity = totalQuantity
+    order.orderType = orderType
+    if orderType == 'LMT':
+        order.lmtPrice = lmtPrice
+
+    ib_app.placeOrder(ib_app.nextOrderId, contract, order)
+    ib_app.nextOrderId += 1
+
+    return jsonify({"status": "success", "message": f"Order to {action} {totalQuantity} of {symbol} placed"})
+
+
+@app.route('/contract/status', methods=['GET'])
+def order_status():
+    global ib_app
+    if ib_app is None:
+        return jsonify({"error": "Not connected to TWS"})
+
+    # Return a mock response for now
+    return jsonify({"status": "success", "orders": ib_app.order_responses})
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
