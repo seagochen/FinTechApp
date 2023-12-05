@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="csharp_app.MainWindow"
+        Title="JTFin_v0.0.1 alpha">
+    
+    <DockPanel>
+        <!-- Menu Bar -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Settings" Click="OnSettingsClick"/>
+                <MenuItem Header="Exit" Click="OnExitClick"/>
+            </MenuItem>
+            <!-- <MenuItem Header="Edit"> -->
+            <!--     <MenuItem Header="Data Source" Click="OnDataSourceClick"/> -->
+            <!-- </MenuItem> -->
+        </Menu>
+        
+        <!-- Main Area -->
+        <Grid>
+            <!-- Left Navigator -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Background="Gray">
+                
+                <!-- Place the following tab control in the left navigator area -->
+                <TabControl TabStripPlacement="Left" SelectionChanged="OnTabSelectionChanged" Name="LeftTabControl">
+                    <TabItem Header="Accounts Management" Name="AccountsView"/>
+                    <TabItem Header="Household Ledger" Name="HouseholdLedgerView"/>
+                    <TabItem Header="Stock Analysis" Name="StockAnalysisView"/>
+                </TabControl>
+            </Border>
+            
+            <!-- Right Main Area -->
+            <Border Background="White" Grid.Column="1">
+                <ContentControl Name="RightContentControl" />
+            </Border>
+        </Grid>
+    </DockPanel>
+    
+    
+    <Window.Styles>
+        
+        <!-- Menu bar style -->
+        <Style Selector="Menu">
+            <!-- Background color defined as grey-->
+            <Setter Property="Background" Value="#427D9D"/>
+            <!-- Font color defined as white -->
+            <Setter Property="Foreground" Value="#F0F0F0"/>
+            <!-- Font size defined as 16 -->
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <!-- Tab background color -->
+        <Style Selector="TabControl WrapPanel">
+            <Setter Property="Background" Value="#164863"/>
+        </Style>
+
+        <!-- Tab item style -->
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#164863"/>
+            <Setter Property="Foreground" Value="#F0F0F0"/>
+            <Setter Property="Margin" Value="0 0 0 0"/>
+            <Setter Property="Padding" Value="10 0"/>
+        </Style>
+        
+        <!-- When the mouse is over the item -->
+        <Style Selector="TabItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#DDF2FD"/>
+        </Style>
+
+        <!-- When the item is selected by the user -->
+        <Style Selector="TabItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#9BBEC8"/>
+        </Style>
+
+    </Window.Styles>
+    
+    <!-- Welcome to Avalonia! -->
+</Window>
