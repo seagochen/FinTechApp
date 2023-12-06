@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
-from ibapi.client import EClient
-from ibapi.wrapper import EWrapper
+
 from ibapi.contract import Contract
 from ibapi.order import Order
 import threading
@@ -8,37 +7,6 @@ import time
 
 app = Flask(__name__)
 
-
-# TestApp for interacting with TWS API
-class TestApp(EWrapper, EClient):
-    def __init__(self):
-        EClient.__init__(self, self)
-        self.nextOrderId = None
-        self.order_responses = []
-        self.accountValues = {}
-        self.positions = {}
-
-    def error(self, reqId, errorCode, errorString, advancedOrderRejectJson=None):
-        print("Error: ", reqId, " ", errorCode, " ", errorString, " ", advancedOrderRejectJson)
-
-    def updateAccountValue(self, key: str, val: str, currency: str, accountName: str):
-        self.accountValues[key] = {"value": val, "currency": currency, "account": accountName}
-
-    def position(self, account, contract, position, avgCost):
-        self.positions[contract.symbol] = {"position": position, "avgCost": avgCost}
-
-    def nextValidId(self, orderId: int):
-        self.nextOrderId = orderId
-
-    def orderStatus(self, orderId, status, filled, remaining, avgFillPrice, permId,
-                    parentId, lastFillPrice, clientId, whyHeld, mktCapPrice):
-        self.order_responses.append({
-            "orderId": orderId,
-            "status": status,
-            "filled": filled,
-            "remaining": remaining,
-            "avgFillPrice": avgFillPrice
-        })
 
 
 # Global instance of your TestApp
