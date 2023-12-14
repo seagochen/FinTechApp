@@ -171,7 +171,7 @@ def headTimestamp(self, reqId, headTimestamp):
 此方法允许用户根据指定的合约、时间范围和数据类型获取历史柱状图数据。这些数据可以用于市场分析、交易策略开发和历史性能评估等多种用途。通过精确控制请求的数据类型和时间范围，用户可以确保他们获取的数据与其分析需求紧密相关。
 
 ```python
-    self.reqHistoricalData(4102, contract, queryTime, "1 M", "1 day", "MIDPOINT", 1, 1, False, [])
+self.reqHistoricalData(4102, contract, queryTime, "1 M", "1 day", "MIDPOINT", 1, 1, False, [])
 ```
 
 ### Duration
@@ -275,7 +275,7 @@ Date: 20231204 13:30:45 US/Eastern, Open: 188.54, High: 188.54, Low: 188.54, Clo
 
 ```python
 def historicalData(self, reqId:int, bar: BarData):
-    print("HistoricalData. ReqId:", reqId, "BarData.", bar)
+  print("HistoricalData. ReqId:", reqId, "BarData.", bar)
 ```
 
 ----

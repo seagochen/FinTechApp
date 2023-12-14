@@ -26,11 +26,11 @@
 此方法在接收到来自 `EClient.reqNewsBulletins` 的新闻公告请求后被触发，提供公告的详细信息，包括其类型、内容以及来源交易所。这对于用户及时了解和响应市场和交易所的重要通知非常有用。
 
 ```python
-    def updateNewsBulletin(self, msgId: int, msgType: int, newsMessage: str, originExch: str):
-        print("News Bulletins. MsgId:", msgId, "Type:", msgType, "Message:", newsMessage, "Exchange of Origin: ", originExch)
+def updateNewsBulletin(self, msgId: int, msgType: int, newsMessage: str, originExch: str):
+    print("News Bulletins. MsgId:", msgId, "Type:", msgType, "Message:", newsMessage, "Exchange of Origin: ", originExch)
 ```
 
-## Cancel Bulletin RequestCopy Location
+## Cancel Bulletin Request
 
 `EClient.cancelNewsBulletin` 方法用于取消订阅交互式经纪人（IB）的新闻公告。通过调用这个方法，用户可以停止接收通过 `EClient.reqNewsBulletins` 方法订阅的新闻公告更新，这对于控制接收的信息量或结束对特定新闻公告的关注非常有用。
 

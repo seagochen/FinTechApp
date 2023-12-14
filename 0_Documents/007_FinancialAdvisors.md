@@ -114,7 +114,7 @@ def receiveFA(self, faData: FaDataType, cxml: str):
 此方法允许用户通过发送 XML 格式的配置来更新财务顾问的配置文件或群组设置。这对于在交易策略发生变化时调整分配方法或进行其他相关配置更新非常有用，特别是在需要精细管理多账户交易策略的情况下。通过 `reqId` 可以跟踪这些更改的请求，确保操作的准确性和有效性。
 
 ```python
-   self.replaceFa(reqId, 1, xml)
+self.replaceFa(reqId, 1, xml)
 ```
 
 ### ReplaceFA XML Structure
@@ -165,10 +165,10 @@ TWS API 中不可用的模型投资组合功能：
 要向模型下订单，必须相应地设置 `IBApi.Order.ModelCode` 字段，例如：
 
 ```python
-   modelOrder = Order()
-   modelOrder.account = "DF12345"
-   modelOrder.modelCode = "Technology" # model for tech stocks first created in TWS
-   self.placeOrder(self.nextOrderId(), contract, modelOrder)
+modelOrder = Order()
+modelOrder.account = "DF12345"
+modelOrder.modelCode = "Technology" # model for tech stocks first created in TWS
+self.placeOrder(self.nextOrderId(), contract, modelOrder)
 ```
 
 ## Unification of Groups and ProfilesCopy Location

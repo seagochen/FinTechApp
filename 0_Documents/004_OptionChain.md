@@ -21,7 +21,7 @@
 此方法用于请求安全定义选项参数，以便查看合约的期权链。它为用户提供了获取特定基础资产的期权链所需的关键信息，包括到期日和执行价等，这对于期权交易者进行市场分析和决策非常重要。
 
 ```python
-    self.reqSecDefOptParams(0, "IBM", "", "STK", 8314)
+self.reqSecDefOptParams(0, "IBM", "", "STK", 8314)
 ```
 
 ## Receive Option Chains
@@ -39,6 +39,6 @@
 如果在 `reqSecDefOptParams` 中指定了多个交易所，将会有多次对 `securityDefinitionOptionParameter` 的回调。这为用户提供了获取特定交易所上特定基础资产期权链的详细信息，包括不同到期日和执行价的选项，这对于进行期权交易和策略规划非常重要。
 
 ```python
-    def securityDefinitionOptionParameter(self, reqId: int, exchange: str, underlyingConId: int, tradingClass: str, multiplier: str, expirations: SetOfString, strikes: SetOfFloat):
-        print("SecurityDefinitionOptionParameter.", "ReqId:", reqId, "Exchange:", exchange, "Underlying conId:", underlyingConId, "TradingClass:", tradingClass, "Multiplier:", multiplier, "Expirations:", expirations, "Strikes:", strikes)
+def securityDefinitionOptionParameter(self, reqId: int, exchange: str, underlyingConId: int, tradingClass: str, multiplier: str, expirations: SetOfString, strikes: SetOfFloat):
+    print("SecurityDefinitionOptionParameter.", "ReqId:", reqId, "Exchange:", exchange, "Underlying conId:", underlyingConId, "TradingClass:", tradingClass, "Multiplier:", multiplier, "Expirations:", expirations, "Strikes:", strikes)
 ```

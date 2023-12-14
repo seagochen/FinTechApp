@@ -140,14 +140,8 @@ EClient.reqAccountSummary(9001, "All", AccountSummaryTags.AllTags)
 此方法允许用户以编程方式访问和分析其在 TWS 中可见的同等级别的账户信息。通过此方法接收到的数据可以用于自动化的财务分析、实时监控或集成到更广泛的投资管理系统中。对于管理多个账户或需要详细财务报告的用户来说，这个功能尤其有价值，因为它提供了快速、准确的账户状态更新。
 
 ```python
-def accountSummary(feedback: list, reqId: int, account: str, tag: str, value: str,currency: str):
-    feedback.append({
-        "method": "accountSummary",
-        "reqId": reqId, 
-        "account": account, 
-        "tag": tag, 
-        "value": value, 
-        "currency": currency})
+def accountSummary(reqId: int, account: str, tag: str, value: str,currency: str):
+  print("AccountSummary. ReqId:", reqId, "Account:", account,"Tag: ", tag, "Value:", value, "Currency:", currency)
 ```
 
 ----
@@ -248,10 +242,8 @@ def updateAccountValue(self, key: str, val: str, currency: str,accountName: str)
 - `accountName: str`：账户标识符。
 
 ```python
-
 def updatePortfolio(self, contract: Contract, position: float, marketPrice: float, marketValue: float, averageCost: float, unrealizedPNL: float, realizedPNL: float, accountName: str):
     print("UpdatePortfolio.", "Symbol:", contract.symbol, "SecType:", contract.secType, "Exchange:", contract.exchange, "Position:", position, "MarketPrice:", marketPrice, "MarketValue:", marketValue, "AverageCost:", averageCost, "UnrealizedPNL:", unrealizedPNL, "RealizedPNL:", realizedPNL, "AccountName:", accountName)
-    
 ```
 
 ----
