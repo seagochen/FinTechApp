@@ -1,3 +1,8 @@
+- [Contracts (Financial Instruments)](#contracts-financial-instruments)
+  - [The Contract ObjectCopy Location](#the-contract-objectcopy-location)
+  - [Finding Contract Details in Trader Workstation](#finding-contract-details-in-trader-workstation)
+
+
 # Contracts (Financial Instruments)
 
 `IBApi.Contract` 对象代表交易工具，例如股票、期货或期权。每当向 TWS（交易工作站）发送需要合约的新请求（例如市场数据、下单等）时，平台会尝试将提供的合约对象与单一候选对象进行匹配。

@@ -1,3 +1,9 @@
+- [Bulletins](#bulletins)
+  - [Request IB BulletinsCopy Location](#request-ib-bulletinscopy-location)
+  - [Receive IB BulletinsCopy Location](#receive-ib-bulletinscopy-location)
+  - [Cancel Bulletin Request](#cancel-bulletin-request)
+
+
 # Bulletins
 
 交互式经纪人（Interactive Brokers, IB）会不时发送重要的新闻公告，这些公告可以通过 TWS API 中的 `EClient.reqNewsBulletins` 访问。每当有新的公告时，公告会通过 `IBApi.EWrapper.updateNewsBulletin` 传递。为了停止接收这些公告，您需要取消订阅。

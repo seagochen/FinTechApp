@@ -1,3 +1,9 @@
+- [Error Handling](#error-handling)
+  - [Advanced order rejection](#advanced-order-rejection)
+  - [Error Message Codes](#error-message-codes)
+  - [Receive Error Messages](#receive-error-messages)
+
+
 # Error Handling
 
 当客户端应用程序向 TWS 发送需要响应的消息（例如下订单、请求市场数据、订阅账户更新等）时，TWS 几乎总是会 1）用相关数据响应或 2）通过 `IBApi::EWrapper::error` 发送错误消息。

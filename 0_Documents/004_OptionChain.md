@@ -1,3 +1,8 @@
+- [Option Chains](#option-chains)
+  - [Request Option Chains](#request-option-chains)
+  - [Receive Option Chains](#receive-option-chains)
+
+
 # Option Chains
 
 使用 `reqContractDetails` 函数可以返回给定证券的期权链。如果一个期权合约定义不完整（例如未定义执行价），并用作 `IBApi::EClient::reqContractDetails` 的参数，则会返回所有匹配的期权合约列表。

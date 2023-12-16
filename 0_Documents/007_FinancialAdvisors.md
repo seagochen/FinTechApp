@@ -1,3 +1,16 @@
+- [Financial Advisors](#financial-advisors)
+  - [Allocation Methods and Groups](#allocation-methods-and-groups)
+  - [Allocation by Group](#allocation-by-group)
+  - [Allocation by Profile](#allocation-by-profile)
+  - [Managing Groups and Profiles from the API](#managing-groups-and-profiles-from-the-api)
+    - [Request FA Groups and Profiles](#request-fa-groups-and-profiles)
+    - [Receiving FA Groups and Profiles](#receiving-fa-groups-and-profiles)
+    - [Replace FA Allocations](#replace-fa-allocations)
+    - [ReplaceFA XML Structure](#replacefa-xml-structure)
+  - [Model Portfolios and the API](#model-portfolios-and-the-api)
+  - [Unification of Groups and ProfilesCopy Location](#unification-of-groups-and-profilescopy-location)
+
+
 # Financial Advisors
 
 ## Allocation Methods and Groups
@@ -68,7 +81,7 @@
 
 注意：通过 API 所做的修改将影响通过 TWS、TWS API、客户门户（Client Portal）和客户门户 API 下达的订单。这意味着，无论是在哪个平台或接口进行的订单操作，都将受到通过 API 进行的分配群组设置的影响。因此，使用 API 修改分配群组时需要谨慎，以确保所有相关的交易平台和接口都能正确反映这些变更。
 
-## Request FA Groups and Profiles
+### Request FA Groups and Profiles
 
 `EClient.requestFA` 方法用于请求财务顾问（FA）的配置信息，如在 TWS 中为指定的 FA 群组或配置文件所设置。该方法的参数包括：
 
@@ -88,7 +101,7 @@ FA Data Types
 | 1         | Groups          | offer traders a way to create a group of accounts and apply a single allocation method to all accounts in the group. |
 | 3         | Account Aliases | let you easily identify the accounts by meaningful names rather than account numbers.                                |
 
-## Receiving FA Groups and Profiles
+### Receiving FA Groups and Profiles
 
 `EWrapper.receiveFA` 方法用于接收 TWS 中可用的财务顾问（FA）配置。该方法的参数包括：
 
@@ -103,7 +116,7 @@ def receiveFA(self, faData: FaDataType, cxml: str):
    open('log/fa.xml', 'w').write(cxml)
 ```
 
-## Replace FA Allocations
+### Replace FA Allocations
 
 `EClient.replaceFA` 方法用于更改财务顾问（FA）的配置结构。该方法的参数包括：
 

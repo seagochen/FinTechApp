@@ -1,3 +1,8 @@
+- [Stock Symbol Search](#stock-symbol-search)
+  - [Request Stock Contract Search](#request-stock-contract-search)
+  - [Receive Searched Stock Contract](#receive-searched-stock-contract)
+
+
 # Stock Symbol Search
 
 `IBApi::EClient::reqMatchingSymbols` 函数可用于搜索股票合约。输入可以是股票代码的前几个字母，或对于更长的字符串，可以是证券名称中匹配的字符序列。例如，要搜索股票代码 ‘IBKR’，可以使用输入 ‘I’ 或 ‘IB’，也可以使用单词 ‘Interactive’。最多返回 16 个匹配结果。
