@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 
 # import ib_api and api_thread from app.py
 from app import ib_app

@@ -22,7 +22,7 @@
   - [Positions](#positions)
     - [Request Positions](#request-positions)
     - [Receive Positions](#receive-positions)
-    - [Cancel Positions Request](#cancel-positions-requestcopy-location)
+    - [Cancel Positions Request](#cancel-positions-request)
   - [Positions By Model](#positions-by-model)
     - [Request Positions By Model](#request-positions-by-model)
     - [Receive Positions By Model](#receive-positions-by-model)
@@ -30,12 +30,12 @@
   - [Profit \& Loss (PnL)](#profit--loss-pnl)
     - [Request P\&L for individual positions](#request-pl-for-individual-positions)
     - [Receive P\&L for individual positions](#receive-pl-for-individual-positions)
-    - [Cancel P\&L request for individual positions](#cancel-pl-request-for-individual-positionscopy-location)
+    - [Cancel P\&L request for individual positions](#cancel-pl-request-for-individual-positions)
     - [Request P\&L for accounts](#request-pl-for-accounts)
     - [Receive P\&L for accounts](#receive-pl-for-accounts)
     - [Cancel P\&L subscription requests for accounts](#cancel-pl-subscription-requests-for-accounts)
   - [White Branding User Info](#white-branding-user-info)
-    - [Requesting White Branding Info](#requesting-white-branding-infocopy-location)
+    - [Requesting White Branding Info](#requesting-white-branding-info)
     - [Receiving White Branding Info](#receiving-white-branding-info)
 
 
@@ -665,7 +665,7 @@ def positionEnd(self):
     print("PositionEnd")
 ```
 
-### Cancel Positions RequestCopy Location
+### Cancel Positions Request
 
 EClient.cancelPositions()
 
@@ -775,7 +775,7 @@ def pnlSingle(self, reqId: int, pos: Decimal, dailyPnL: float, unrealizedPnL: fl
     print("Daily PnL Single. ReqId:", reqId, "Position:", pos, "DailyPnL:", dailyPnL, "UnrealizedPnL:", unrealizedPnL, "RealizedPnL:", realizedPnL, "Value:", value)
 ```
 
-### Cancel P&L request for individual positionsCopy Location
+### Cancel P&L request for individual positions
 
 `EClient.cancelPnLSingle` 方法用于取消收益与亏损（P&L）订阅。该方法的参数包括：
 
@@ -837,7 +837,7 @@ self.cancelPnL(reqId)
 
 请注意，如果请求的用户名没有与任何白标实体关联，那么将不会返回任何内容。
 
-### Requesting White Branding InfoCopy Location
+### Requesting White Branding Info
 
 `EClient.reqUserInfo` 方法用于请求用户信息。该方法的参数包括：
 
