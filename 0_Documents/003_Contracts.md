@@ -1,5 +1,5 @@
 - [Contracts (Financial Instruments)](#contracts-financial-instruments)
-  - [The Contract ObjectCopy Location](#the-contract-objectcopy-location)
+  - [The Contract Object](#the-contract-objectcopy-location)
   - [Finding Contract Details in Trader Workstation](#finding-contract-details-in-trader-workstation)
 
 
@@ -9,7 +9,7 @@
 
 这种机制确保了交易指令的准确性，因为在执行市场数据查询、订单下达等操作之前，必须明确指定和识别特定的交易工具。`Contract` 对象通过其属性（如标的代码、交易所、货币等）为这些操作提供了必要的详细信息。
 
-## The Contract ObjectCopy Location
+## The Contract Object
 
 `Contract` 对象在整个 TWS API 中被广泛用于定义请求的目标。`Contract` 对象用于市场数据、投资组合、订单、执行情况，甚至某些新闻请求。它是 TWS API 所有操作的基础结构。
 

@@ -22,7 +22,7 @@
   - [Positions](#positions)
     - [Request Positions](#request-positions)
     - [Receive Positions](#receive-positions)
-    - [Cancel Positions RequestCopy Location](#cancel-positions-requestcopy-location)
+    - [Cancel Positions Request](#cancel-positions-requestcopy-location)
   - [Positions By Model](#positions-by-model)
     - [Request Positions By Model](#request-positions-by-model)
     - [Receive Positions By Model](#receive-positions-by-model)
@@ -30,12 +30,12 @@
   - [Profit \& Loss (PnL)](#profit--loss-pnl)
     - [Request P\&L for individual positions](#request-pl-for-individual-positions)
     - [Receive P\&L for individual positions](#receive-pl-for-individual-positions)
-    - [Cancel P\&L request for individual positionsCopy Location](#cancel-pl-request-for-individual-positionscopy-location)
+    - [Cancel P\&L request for individual positions](#cancel-pl-request-for-individual-positionscopy-location)
     - [Request P\&L for accounts](#request-pl-for-accounts)
     - [Receive P\&L for accounts](#receive-pl-for-accounts)
     - [Cancel P\&L subscription requests for accounts](#cancel-pl-subscription-requests-for-accounts)
   - [White Branding User Info](#white-branding-user-info)
-    - [Requesting White Branding InfoCopy Location](#requesting-white-branding-infocopy-location)
+    - [Requesting White Branding Info](#requesting-white-branding-infocopy-location)
     - [Receiving White Branding Info](#receiving-white-branding-info)
 
 

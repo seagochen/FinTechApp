@@ -19,13 +19,15 @@ from Utilities import dict_to_json, list_to_json
 
 class TWSClientWrapper_V1(EWrapper, EClient):
 
-    def __init__(self, ip, port):
+    def __init__(self, tws_ip, tws_port, tws_clientId=0, zmq_ip="127.0.0.1", zmq_port=1618):
         EClient.__init__(self, self)
         self.nextOrderId = None
 
-        self.ip = ip
-        self.port = port
-        self.zmq_socket = zmq(ip, port)
+        # Connect to ZeroMQ
+        self.zmq_socket = zmq(zmq_ip, zmq_port)
+
+        # Connect to TWS
+        self.connect(tws_ip, tws_port, tws_clientId)
 
     def error(self, reqId, errorCode, errorString, advancedOrderRejectJson=None):
         if self.zmq_socket is not None:
