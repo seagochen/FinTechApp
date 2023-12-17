@@ -90,50 +90,7 @@ pendingPriceRevision：bool。描述執行是否仍在等待價格修訂。
 
 鑒於執行的附加結構不斷演變，建議查閱您的編程語言中相關的Execution類，以全面審查可用字段。
 
-
-```python
-class Execution(Object):
-    def __init__(self):
-        self.execId = ""
-        self.time =  ""
-        self.acctNumber =  ""
-        self.exchange =  ""
-        self.side = ""
-        self.shares = UNSET_DECIMAL
-        self.price = 0. 
-        self.permId = 0
-        self.clientId = 0
-        self.orderId = 0
-        self.liquidation = 0
-        self.cumQty = UNSET_DECIMAL
-        self.avgPrice = 0.
-        self.orderRef =  ""
-        self.evRule =  ""
-        self.evMultiplier = 0.
-        self.modelCode =  ""
-        self.lastLiquidity = 0
-
-    def __str__(self):
-        return "ExecId: %s, Time: %s, Account: %s, Exchange: %s, Side: %s, Shares: %s, Price: %s, PermId: %s, " \
-                "ClientId: %s, OrderId: %s, Liquidation: %s, CumQty: %s, AvgPrice: %s, OrderRef: %s, EvRule: %s, " \
-                "EvMultiplier: %s, ModelCode: %s, LastLiquidity: %s" % (self.execId, self.time, self.acctNumber, 
-                self.exchange, self.side, decimalMaxString(self.shares), floatMaxString(self.price), intMaxString(self.permId), 
-                intMaxString(self.clientId), intMaxString(self.orderId), intMaxString(self.liquidation),
-                decimalMaxString(self.cumQty), floatMaxString(self.avgPrice), self.orderRef, self.evRule, floatMaxString(self.evMultiplier), 
-                self.modelCode, intMaxString(self.lastLiquidity))
-
-
-class ExecutionFilter(Object):
-    # Filter fields
-    def __init__(self):
-        self.clientId = 0
-        self.acctCode = ""
-        self.time = ""
-        self.symbol = ""
-        self.secType = ""
-        self.exchange = "" 
-        self.side = ""
-```
+> ¥ibapi¥execution.py
 
 ### Request Execution Details
 

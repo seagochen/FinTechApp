@@ -261,7 +261,7 @@ def historicalNews(self, requestId: int, time: int, providerCode: str, articleId
 `historicalNewsEnd` 回调为用户提供了一个清晰的结束标记，从而可以确保他们已经收到了所有请求的数据，或者了解是否需要进行进一步的请求以获取更多数据。这有助于用户有效地管理他们的新闻数据请求和分析过程，确保他们能够获得所需的所有相关信息。
 
 ```python
-def historicalDataEnd(self, reqId: int, hasMore: bool):
+def historicalNewsEnd(self, reqId: int, hasMore: bool):
     print("historicalDataEnd. ReqId:", reqId, "Has More:", hasMore)
 ```
 
