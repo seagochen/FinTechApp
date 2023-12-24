@@ -1,9 +1,0 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="csharp_app.ViewController.MainWindowUserControl.MainWindowUserControlStockMarketTab">
-    
-    <!-- set the background to Green -->
-    <Panel Background="Green">
-        <TextBlock Text="Hello World!"/>
-    </Panel>
-</UserControl>
