@@ -4,10 +4,11 @@ import com.ib.client.TickAttrib;
 
 // You would also need a class to represent the data structure
 public class TickPriceData {
-    private int reqId;
-    private int field;
-    private double price;
-    private TickAttrib attrib;
+    
+    public int reqId;
+    public int field;
+    public double price;
+    public TickAttrib attrib;
 
     public TickPriceData(int reqId, int field, double price, TickAttrib attrib) {
         this.reqId = reqId;

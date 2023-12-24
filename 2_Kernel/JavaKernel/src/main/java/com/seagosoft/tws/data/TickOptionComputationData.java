@@ -2,17 +2,17 @@ package com.seagosoft.tws.data;
 
 public class TickOptionComputationData {
 
-    private int tickerId;
-    private int field;
-    private int tickAttrib;
-    private double impliedVol;
-    private double delta;
-    private double optPrice;
-    private double pvDividend;
-    private double gamma;
-    private double vega;
-    private double theta;
-    private double undPrice;
+    public int tickerId;
+    public int field;
+    public int tickAttrib;
+    public double impliedVol;
+    public double delta;
+    public double optPrice;
+    public double pvDividend;
+    public double gamma;
+    public double vega;
+    public double theta;
+    public double undPrice;
 
     public TickOptionComputationData(int tickerId, int field, int tickAttrib, double impliedVol, double delta, double optPrice,
                                      double pvDividend, double gamma, double vega, double theta, double undPrice) {

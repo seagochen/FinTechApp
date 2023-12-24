@@ -2,9 +2,9 @@ package com.seagosoft.tws.data;
 
 public class tickStringData {
 
-    private int tickerId;
-    private int tickType;
-    private String value;
+    public int tickerId;
+    public int tickType;
+    public String value;
 
     public tickStringData(int tickerId, int tickType, String value) {
         this.tickerId = tickerId;
