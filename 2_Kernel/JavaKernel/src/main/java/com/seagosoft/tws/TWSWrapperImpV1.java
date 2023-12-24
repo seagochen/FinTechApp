@@ -1261,7 +1261,7 @@ public class TWSWrapperImpV1 implements EWrapper {
             zmqServerHandler.send("HistoricalDataUpdate", json);
         } else {
             System.out.println("HistoricalDataUpdate: " +
-                    EWrapperMsgGenerator.historicalData(reqId bar.time(), bar.open(), bar.high(), bar.low(),
+                    EWrapperMsgGenerator.historicalData(reqId, bar.time(), bar.open(), bar.high(), bar.low(),
                             bar.close(), bar.volume(), bar.count(), bar.wap()));
         }
     }
@@ -1321,38 +1321,66 @@ public class TWSWrapperImpV1 implements EWrapper {
         }
     }
 
+
     /**
-     * @param i
-     * @param v
-     * @param v1
-     * @param v2
+     *
+     * @param reqId
+     * @param dailyPnL
+     * @param unrealizedPnL
+     * @param realizedPnL
      */
     @Override
-    public void pnl(int i, double v, double v1, double v2) {
+    public void pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new PnLData(reqId, dailyPnL, unrealizedPnL, realizedPnL));
+            zmqServerHandler.send("PnL", json);
+        } else {
+            System.out.println("PnL: " +EWrapperMsgGenerator.pnl(reqId, dailyPnL, unrealizedPnL, realizedPnL));
+        }
+    }
 
+
+    /**
+     *
+     * @param reqId
+     * @param pos
+     * @param dailyPnL
+     * @param unrealizedPnL
+     * @param realizedPnL
+     * @param value
+     */
+    @Override
+    public void pnlSingle(int reqId, Decimal pos, double dailyPnL,
+                          double unrealizedPnL, double realizedPnL, double value) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new PnLSingleData(reqId, pos, dailyPnL, unrealizedPnL, realizedPnL, value));
+            zmqServerHandler.send("PnLSingle", json);
+        } else {
+            System.out.println("PnLSingle: " +
+                    EWrapperMsgGenerator.pnlSingle(reqId, pos, dailyPnL, unrealizedPnL, realizedPnL, value));
+        }
     }
 
     /**
-     * @param i
-     * @param decimal
-     * @param v
-     * @param v1
-     * @param v2
-     * @param v3
+     *
+     * @param reqId
+     * @param ticks
+     * @param done
      */
     @Override
-    public void pnlSingle(int i, Decimal decimal, double v, double v1, double v2, double v3) {
-
-    }
-
-    /**
-     * @param i
-     * @param list
-     * @param b
-     */
-    @Override
-    public void historicalTicks(int i, List<HistoricalTick> list, boolean b) {
-
+    public void historicalTicks(int reqId, List<HistoricalTick> ticks, boolean done) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalTicksData(reqId, ticks, done));
+            zmqServerHandler.send("HistoricalTicks", json);
+        } else {
+            for (HistoricalTick tick : ticks) {
+                System.out.println("HistoricalTick: " +
+                        EWrapperMsgGenerator.historicalTick(reqId, tick.time(), tick.price(), tick.size()));
+            }
+        }
     }
 
     /**
