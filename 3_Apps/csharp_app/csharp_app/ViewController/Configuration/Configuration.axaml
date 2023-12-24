@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="csharp_app.ViewController.Configuration.Configuration"
+        Title="Configuration">
+        
+    <Window.Styles>
+        <!-- Set the default style for all buttons -->
+        <Style Selector="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        
+        <!-- Set the style for the Cancel button -->
+        <Style Selector="Button.CancelButton">
+            <Setter Property="Background" Value="#E0483F"/>
+        </Style>
+        
+        <!-- Set the style for the Apply button -->
+        <Style Selector="Button.ApplyButton">
+            <Setter Property="Background" Value="#3FE07F"/>
+        </Style>
+    </Window.Styles>
+    
+    <Grid>
+        <!-- Define the grid columns -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left navigation panel -->
+        <ListBox x:Name="Navigation" Grid.Column="0" SelectionChanged="Navigation_SelectionChanged">
+            <ListBoxItem Content="Database"/>
+            <ListBoxItem Content="IB TWS"/>
+        </ListBox>
+
+        <!-- Right content panel -->
+        <ContentControl x:Name="ContentPanel" Grid.Column="1">
+            <!-- The content of this control will be set dynamically based on the selected navigation item -->
+        </ContentControl>
+
+        <!-- Bottom buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                    Margin="20" Grid.Column="1">
+            <Button Content="Apply" Width="100" Classes="ApplyButton" Click="OnApplyClick"/>
+            <Button Content="Cancel" Width="100" Classes="CancelButton" Click="OnCancelClick" Margin="10,0,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
