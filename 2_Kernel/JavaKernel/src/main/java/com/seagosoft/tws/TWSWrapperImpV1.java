@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import com.seagosoft.tws.data.*;
 import com.seagosoft.zmq.ZeroMQServerHandler;
@@ -675,14 +676,21 @@ public class TWSWrapperImpV1 implements EWrapper {
     }
 
     /**
-     * @param s
+     *
+     * @param account
      * @param contract
-     * @param decimal
-     * @param v
+     * @param pos
+     * @param avgCost
      */
     @Override
-    public void position(String s, Contract contract, Decimal decimal, double v) {
-
+    public void position(String account, Contract contract, Decimal pos, double avgCost) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new PositionData(account, contract, pos, avgCost));
+            zmqServerHandler.send("Position", json);
+        } else {
+            System.out.println("Position: " + EWrapperMsgGenerator.position(account, contract, pos, avgCost));
+        }
     }
 
     /**
@@ -690,80 +698,126 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void positionEnd() {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("PositionEnd", "");
+        } else {
+            System.out.println("PositionEnd");
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param s1
-     * @param s2
-     * @param s3
+     *
+     * @param reqId
+     * @param account
+     * @param tag
+     * @param value
+     * @param currency
      */
     @Override
-    public void accountSummary(int i, String s, String s1, String s2, String s3) {
-
+    public void accountSummary(int reqId, String account, String tag, String value, String currency) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new AccountSummaryData(reqId, account, tag, value, currency));
+            zmqServerHandler.send("AccountSummary", json);
+        } else {
+            System.out.println("AccountSummary: " + EWrapperMsgGenerator.accountSummary(reqId, account, tag, value, currency));
+        }
     }
 
     /**
-     * @param i
+     *
+     * @param reqId
      */
     @Override
-    public void accountSummaryEnd(int i) {
-
+    public void accountSummaryEnd(int reqId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("AccountSummaryEnd", Integer.toString(reqId));
+        } else {
+            System.out.println("AccountSummaryEnd: " + EWrapperMsgGenerator.accountSummaryEnd(reqId));
+        }
     }
 
+
     /**
+     *
      * @param s
      */
     @Override
     public void verifyMessageAPI(String s) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("VerifyMessageAPI", s);
+        } else {
+            System.out.println("VerifyMessageAPI: " + s);
+        }
     }
 
+
     /**
+     *
      * @param b
      * @param s
      */
     @Override
     public void verifyCompleted(boolean b, String s) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("VerifyCompleted", Boolean.toString(b) + "," + s);
+        } else {
+            System.out.println("VerifyCompleted: " + b + "," + s);
+        }
     }
 
     /**
+     *
      * @param s
      * @param s1
      */
     @Override
     public void verifyAndAuthMessageAPI(String s, String s1) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("VerifyAndAuthMessageAPI", s + "," + s1);
+        } else {
+            System.out.println("VerifyAndAuthMessageAPI: " + s + "," + s1);
+        }
     }
 
     /**
+     *
      * @param b
      * @param s
      */
     @Override
     public void verifyAndAuthCompleted(boolean b, String s) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("VerifyAndAuthCompleted", Boolean.toString(b) + "," + s);
+        } else {
+            System.out.println("VerifyAndAuthCompleted: " + b + "," + s);
+        }
     }
 
     /**
-     * @param i
-     * @param s
+     * @param requestId
+     * @param groups
      */
     @Override
-    public void displayGroupList(int i, String s) {
-
+    public void displayGroupList(int requestId, String groups) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("DisplayGroupList", Integer.toString(requestId) + "," + groups);
+        } else {
+            System.out.println("DisplayGroupList: " + requestId + "," + groups);
+        }
     }
 
     /**
-     * @param i
-     * @param s
+     * @param requestId
+     * @param contractInfo
      */
     @Override
-    public void displayGroupUpdated(int i, String s) {
-
+    public void displayGroupUpdated(int requestId, String contractInfo) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("DisplayGroupUpdated", Integer.toString(requestId) + "," + contractInfo);
+        } else {
+            System.out.println("DisplayGroupUpdated: " + requestId + "," + contractInfo);
+        }
     }
 
     /**
@@ -771,7 +825,11 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void error(Exception e) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("Error", e.toString());
+        } else {
+            System.out.println("Error: " + e.toString());
+        }
     }
 
     /**
@@ -779,17 +837,32 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void error(String s) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("Error", s);
+        } else {
+            System.out.println("Error: " + s);
+        }
     }
 
     /**
-     * @param i
-     * @param i1
-     * @param s
-     * @param s1
+     *
+     * @param reqId
+     * @param errorCode
+     * @param errorMsg
+     * @param advancedOrderRejectJson
      */
     @Override
-    public void error(int i, int i1, String s, String s1) {
+    public void error(int reqId, int errorCode, String errorMsg, String advancedOrderRejectJson) {
+        String str = "Error. Id: " + reqId + ", Code: " + errorCode + ", Msg: " + errorMsg;
+        if (advancedOrderRejectJson != null) {
+            str += (", AdvancedOrderRejectJson: " + advancedOrderRejectJson);
+        }
+
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("Error", str);
+        } else {
+            System.out.println("Error: " + str);
+        }
 
     }
 
@@ -798,7 +871,11 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void connectionClosed() {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("ConnectionClosed", "");
+        } else {
+            System.out.println("ConnectionClosed");
+        }
     }
 
     /**
@@ -806,80 +883,141 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void connectAck() {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("ConnectAck", "");
+        } else {
+            System.out.println("ConnectAck");
+        }
     }
 
+
     /**
-     * @param i
-     * @param s
-     * @param s1
+     *
+     * @param reqId
+     * @param account
+     * @param modelCode
      * @param contract
-     * @param decimal
-     * @param v
+     * @param pos
+     * @param avgCost
      */
     @Override
-    public void positionMulti(int i, String s, String s1, Contract contract, Decimal decimal, double v) {
-
+    public void positionMulti(int reqId, String account, String modelCode,
+                              Contract contract, Decimal pos, double avgCost) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new PositionMultiData(reqId, account, modelCode, contract, pos, avgCost));
+            zmqServerHandler.send("PositionMulti", json);
+        } else {
+            System.out.println("PositionMulti: " +
+                    EWrapperMsgGenerator.positionMulti(reqId, account, modelCode, contract, pos, avgCost));
+        }
     }
 
     /**
-     * @param i
+     * @param requestId
      */
     @Override
-    public void positionMultiEnd(int i) {
+    public void positionMultiEnd(int requestId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("PositionMultiEnd", Integer.toString(requestId));
+        } else {
+            System.out.println("PositionMultiEnd: " + EWrapperMsgGenerator.positionMultiEnd(requestId));
+        }
+    }
 
+
+    /**
+     *
+     * @param reqId
+     * @param account
+     * @param modelCode
+     * @param key
+     * @param value
+     * @param currency
+     */
+    @Override
+    public void accountUpdateMulti(int reqId, String account, String modelCode,
+                                   String key, String value, String currency) {
+
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new AccountUpdateMultiData(reqId, account, modelCode, key, value, currency));
+            zmqServerHandler.send("AccountUpdateMulti", json);
+        } else {
+            System.out.println("AccountUpdateMulti: " +
+                    EWrapperMsgGenerator.accountUpdateMulti(reqId, account, modelCode, key, value, currency));
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param s1
-     * @param s2
-     * @param s3
-     * @param s4
+     * @param requestId
      */
     @Override
-    public void accountUpdateMulti(int i, String s, String s1, String s2, String s3, String s4) {
-
+    public void accountUpdateMultiEnd(int requestId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("AccountUpdateMultiEnd", Integer.toString(requestId));
+        } else {
+            System.out.println("AccountUpdateMultiEnd: " + EWrapperMsgGenerator.accountUpdateMultiEnd(requestId));
+        }
     }
 
     /**
-     * @param i
+     *
+     * @param reqId
+     * @param exchange
+     * @param underlyingConId
+     * @param tradingClass
+     * @param multiplier
+     * @param expirations
+     * @param strikes
      */
     @Override
-    public void accountUpdateMultiEnd(int i) {
-
+    public void securityDefinitionOptionalParameter(int reqId,
+                                                    String exchange,
+                                                    int underlyingConId,
+                                                    String tradingClass,
+                                                    String multiplier,
+                                                    Set expirations,
+                                                    Set strikes) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new SecurityDefinitionOptionalParameter(reqId, exchange, underlyingConId,
+                    tradingClass, multiplier, expirations, strikes));
+            zmqServerHandler.send("SecurityDefinitionOptionalParameter", json);
+        } else {
+            System.out.println("SecurityDefinitionOptionalParameter: " +
+                    EWrapperMsgGenerator.securityDefinitionOptionalParameter(reqId, exchange, underlyingConId,
+                            tradingClass, multiplier, expirations, strikes));
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param i1
-     * @param s1
-     * @param s2
-     * @param set
-     * @param set1
+     * @param reqId
      */
     @Override
-    public void securityDefinitionOptionalParameter(int i, String s, int i1, String s1, String s2, Set<String> set, Set<Double> set1) {
-
+    public void securityDefinitionOptionalParameterEnd(int reqId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("SecurityDefinitionOptionalParameterEnd", Integer.toString(reqId));
+        } else {
+            System.out.println("SecurityDefinitionOptionalParameterEnd: " +
+                    EWrapperMsgGenerator.securityDefinitionOptionalParameterEnd(reqId));
+        }
     }
 
     /**
-     * @param i
-     */
-    @Override
-    public void securityDefinitionOptionalParameterEnd(int i) {
-
-    }
-
-    /**
-     * @param i
+     * @param reqId
      * @param softDollarTiers
      */
     @Override
-    public void softDollarTiers(int i, SoftDollarTier[] softDollarTiers) {
-
+    public void softDollarTiers(int reqId, SoftDollarTier[] softDollarTiers) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new SoftDollarTiersData(reqId, softDollarTiers));
+            zmqServerHandler.send("SoftDollarTiers", json);
+        } else {
+            System.out.println("SoftDollarTiers: " +
+                    EWrapperMsgGenerator.softDollarTiers(reqId, softDollarTiers));
+        }
     }
 
     /**
@@ -887,26 +1025,48 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void familyCodes(FamilyCode[] familyCodes) {
-
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new FamilyCodesData(familyCodes));
+            zmqServerHandler.send("FamilyCodes", json);
+        } else {
+            System.out.println("FamilyCodes: " +
+                    EWrapperMsgGenerator.familyCodes(familyCodes));
+        }
     }
 
     /**
-     * @param i
+     * @param reqId
      * @param contractDescriptions
      */
     @Override
-    public void symbolSamples(int i, ContractDescription[] contractDescriptions) {
-
+    public void symbolSamples(int reqId, ContractDescription[] contractDescriptions) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new SymbolSamplesData(reqId, contractDescriptions));
+            zmqServerHandler.send("SymbolSamples", json);
+        } else {
+            System.out.println("SymbolSamples: " +
+                    EWrapperMsgGenerator.symbolSamples(reqId, contractDescriptions));
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param s1
+     *
+     * @param reqId
+     * @param startDateStr
+     * @param endDateStr
      */
     @Override
-    public void historicalDataEnd(int i, String s, String s1) {
-
+    public void historicalDataEnd(int reqId, String startDateStr, String endDateStr) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalDataEndData(reqId, startDateStr, endDateStr));
+            zmqServerHandler.send("HistoricalDataEnd", json);
+        } else {
+            System.out.println("HistoricalDataEnd: " +
+                    EWrapperMsgGenerator.historicalDataEnd(reqId, startDateStr, endDateStr));
+        }
     }
 
     /**
@@ -914,40 +1074,74 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void mktDepthExchanges(DepthMktDataDescription[] depthMktDataDescriptions) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new MktDepthExchangesData(depthMktDataDescriptions));
+            zmqServerHandler.send("MktDepthExchanges", json);
+        } else {
+            System.out.println("MktDepthExchanges: " +
+                    EWrapperMsgGenerator.mktDepthExchanges(depthMktDataDescriptions));
+        }
+    }
 
+
+    /**
+     *
+     * @param tickerId
+     * @param timeStamp
+     * @param providerCode
+     * @param articleId
+     * @param headline
+     * @param extraData
+     */
+    @Override
+    public void tickNews(int tickerId, long timeStamp, String providerCode,
+                         String articleId, String headline, String extraData) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new TickNewsData(tickerId, timeStamp, providerCode, articleId, headline, extraData));
+            zmqServerHandler.send("TickNews", json);
+        } else {
+            System.out.println("TickNews: " +
+                    EWrapperMsgGenerator.tickNews(tickerId, timeStamp, providerCode, articleId, headline, extraData));
+        }
+    }
+
+
+    /**
+     *
+     * @param reqId
+     * @param theMap
+     */
+    @Override
+    public void smartComponents(int reqId, Map<Integer, Entry<String, Character>> theMap) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new SmartComponentsData(reqId, theMap));
+            zmqServerHandler.send("SmartComponents", json);
+        } else {
+            System.out.println("SmartComponents: " +
+                    EWrapperMsgGenerator.smartComponents(reqId, theMap));
+        }
     }
 
     /**
-     * @param i
-     * @param l
-     * @param s
-     * @param s1
-     * @param s2
-     * @param s3
+     *
+     * @param tickerId
+     * @param minTick
+     * @param bboExchange
+     * @param snapshotPermissions
      */
     @Override
-    public void tickNews(int i, long l, String s, String s1, String s2, String s3) {
-
-    }
-
-    /**
-     * @param i
-     * @param map
-     */
-    @Override
-    public void smartComponents(int i, Map<Integer, Map.Entry<String, Character>> map) {
-
-    }
-
-    /**
-     * @param i
-     * @param v
-     * @param s
-     * @param i1
-     */
-    @Override
-    public void tickReqParams(int i, double v, String s, int i1) {
-
+    public void tickReqParams(int tickerId, double minTick, String bboExchange, int snapshotPermissions) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new TickReqParamsData(tickerId, minTick, bboExchange, snapshotPermissions));
+            zmqServerHandler.send("TickReqParams", json);
+        } else {
+            System.out.println("TickReqParams: " +
+                    EWrapperMsgGenerator.tickReqParams(tickerId, minTick, bboExchange, snapshotPermissions));
+        }
     }
 
     /**
@@ -955,94 +1149,176 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void newsProviders(NewsProvider[] newsProviders) {
-
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new NewsProvidersData(newsProviders));
+            zmqServerHandler.send("NewsProviders", json);
+        } else {
+            System.out.println("NewsProviders: " +
+                    EWrapperMsgGenerator.newsProviders(newsProviders));
+        }
     }
 
+
     /**
-     * @param i
-     * @param i1
-     * @param s
+     *
+     * @param requestId
+     * @param articleType
+     * @param articleText
      */
     @Override
-    public void newsArticle(int i, int i1, String s) {
-
+    public void newsArticle(int requestId, int articleType, String articleText) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new NewsArticleData(requestId, articleType, articleText));
+            zmqServerHandler.send("NewsArticle", json);
+        } else {
+            System.out.println("NewsArticle: " +
+                    EWrapperMsgGenerator.newsArticle(requestId, articleType, articleText));
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param s1
-     * @param s2
-     * @param s3
+     *
+     * @param requestId
+     * @param time
+     * @param providerCode
+     * @param articleId
+     * @param headline
      */
     @Override
-    public void historicalNews(int i, String s, String s1, String s2, String s3) {
+    public void historicalNews(int requestId, String time, String providerCode,
+                               String articleId, String headline) {
 
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalNewsData(requestId, time, providerCode, articleId, headline));
+            zmqServerHandler.send("HistoricalNews", json);
+        } else {
+            System.out.println("HistoricalNews: " +
+                    EWrapperMsgGenerator.historicalNews(requestId, time, providerCode, articleId, headline));
+        }
     }
 
     /**
-     * @param i
-     * @param b
+     * @param requestId
+     * @param hasMore
      */
     @Override
-    public void historicalNewsEnd(int i, boolean b) {
-
+    public void historicalNewsEnd(int requestId, boolean hasMore) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalNewsEndData(requestId, hasMore));
+            zmqServerHandler.send("HistoricalNewsEnd", json);
+        } else {
+            System.out.println("HistoricalNewsEnd: " +
+                    EWrapperMsgGenerator.historicalNewsEnd(requestId, hasMore));
+        }
     }
 
     /**
-     * @param i
-     * @param s
+     *
+     * @param requestId
+     * @param headTimestamp
      */
     @Override
-    public void headTimestamp(int i, String s) {
-
+    public void headTimestamp(int requestId, String headTimestamp) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HeadTimestampData(requestId, headTimestamp));
+            zmqServerHandler.send("HeadTimestamp", json);
+        } else {
+            System.out.println("HeadTimestamp: " +
+                    EWrapperMsgGenerator.headTimestamp(requestId, headTimestamp));
+        }
     }
 
     /**
-     * @param i
+     * @param requestId
      * @param list
      */
     @Override
-    public void histogramData(int i, List<HistogramEntry> list) {
-
+    public void histogramData(int requestId, List<HistogramEntry> list) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistogramDataData(requestId, list));
+            zmqServerHandler.send("HistogramData", json);
+        } else {
+            System.out.println("HistogramData: " +
+                    EWrapperMsgGenerator.histogramData(requestId, list));
+        }
     }
 
     /**
-     * @param i
+     * @param reqId
      * @param bar
      */
     @Override
-    public void historicalDataUpdate(int i, Bar bar) {
-
+    public void historicalDataUpdate(int reqId, Bar bar) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalDataUpdateData(reqId, bar));
+            zmqServerHandler.send("HistoricalDataUpdate", json);
+        } else {
+            System.out.println("HistoricalDataUpdate: " +
+                    EWrapperMsgGenerator.historicalData(reqId bar.time(), bar.open(), bar.high(), bar.low(),
+                            bar.close(), bar.volume(), bar.count(), bar.wap()));
+        }
     }
 
     /**
-     * @param i
-     * @param i1
-     * @param s
+     *
+     * @param reqId
+     * @param conId
+     * @param exchange
      */
     @Override
-    public void rerouteMktDataReq(int i, int i1, String s) {
-
+    public void rerouteMktDataReq(int reqId, int conId, String exchange) {
+        if (zmqServerHandler != null) {
+             Gson gson = new Gson();
+            String json = gson.toJson(new RerouteMktDataReqData(reqId, conId, exchange));
+            zmqServerHandler.send("RerouteMktDataReq", json);
+        } else {
+            System.out.println("RerouteMktDataReq: " +
+                    EWrapperMsgGenerator.rerouteMktDataReq(reqId, conId, exchange));
+        }
     }
 
     /**
-     * @param i
-     * @param i1
-     * @param s
+     *
+     * @param reqId
+     * @param conId
+     * @param exchange
      */
     @Override
-    public void rerouteMktDepthReq(int i, int i1, String s) {
-
+    public void rerouteMktDepthReq(int reqId, int conId, String exchange) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new RerouteMktDepthReqData(reqId, conId, exchange));
+            zmqServerHandler.send("RerouteMktDepthReq", json);
+        } else {
+            System.out.println("RerouteMktDepthReq: " +
+                    EWrapperMsgGenerator.rerouteMktDepthReq(reqId, conId, exchange));
+        }
+        System.out.println(EWrapperMsgGenerator.rerouteMktDepthReq(reqId, conId, exchange));
     }
 
+
     /**
-     * @param i
+     *
+     * @param marketRuleId
      * @param priceIncrements
      */
     @Override
-    public void marketRule(int i, PriceIncrement[] priceIncrements) {
-
+    public void marketRule(int marketRuleId, PriceIncrement[] priceIncrements) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new MarketRuleData(marketRuleId, priceIncrements));
+            zmqServerHandler.send("MarketRule", json);
+        } else {
+            System.out.println("MarketRule: " +
+                    EWrapperMsgGenerator.marketRule(marketRuleId, priceIncrements));
+        }
     }
 
     /**
@@ -1080,72 +1356,146 @@ public class TWSWrapperImpV1 implements EWrapper {
     }
 
     /**
-     * @param i
-     * @param list
-     * @param b
+     *
+     * @param reqId
+     * @param ticks
+     * @param done
      */
     @Override
-    public void historicalTicksBidAsk(int i, List<HistoricalTickBidAsk> list, boolean b) {
+    public void historicalTicksBidAsk(int reqId, List<HistoricalTickBidAsk> ticks, boolean done) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalTicksBidAskData(reqId, ticks, done));
+            zmqServerHandler.send("HistoricalTicksBidAsk", json);
+        } else {
 
+            for (HistoricalTickBidAsk tick : ticks) {
+                System.out.println("HistoricalTicksBidAsk: " +
+                        EWrapperMsgGenerator.historicalTickBidAsk(reqId, tick.time(),
+                                tick.tickAttribBidAsk(), tick.priceBid(),
+                                tick.priceAsk(), tick.sizeBid(),
+                                tick.sizeAsk()));
+            }
+        }
     }
 
     /**
-     * @param i
-     * @param list
-     * @param b
+     *
+     * @param reqId
+     * @param ticks
+     * @param done
      */
     @Override
-    public void historicalTicksLast(int i, List<HistoricalTickLast> list, boolean b) {
+    public void historicalTicksLast(int reqId, List<HistoricalTickLast> ticks, boolean done) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalTicksLastData(reqId, ticks, done));
+            zmqServerHandler.send("HistoricalTicksLast", json);
+        } else {
 
+            for (HistoricalTickLast tick : ticks) {
+                System.out.println("HistoricalTicksLast: " +
+                        EWrapperMsgGenerator.historicalTickLast(reqId, tick.time(),
+                                tick.tickAttribLast(), tick.price(),
+                                tick.size(), tick.exchange(),
+                                tick.specialConditions()));
+            }
+        }
     }
 
     /**
-     * @param i
-     * @param i1
-     * @param l
-     * @param v
-     * @param decimal
+     *
+     * @param reqId
+     * @param tickType
+     * @param time
+     * @param price
+     * @param size
      * @param tickAttribLast
-     * @param s
-     * @param s1
+     * @param exchange
+     * @param specialConditions
      */
     @Override
-    public void tickByTickAllLast(int i, int i1, long l, double v, Decimal decimal, TickAttribLast tickAttribLast, String s, String s1) {
-
+    public void tickByTickAllLast(int reqId, int tickType, long time,
+                                  double price, Decimal size, TickAttribLast tickAttribLast,
+                                  String exchange, String specialConditions) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new TickByTickAllLastData(reqId, tickType, time, price, size,
+                    tickAttribLast, exchange, specialConditions));
+            zmqServerHandler.send("TickByTickAllLast", json);
+        } else {
+            System.out.println("TickByTickAllLast: " +
+                    EWrapperMsgGenerator.tickByTickAllLast(reqId, tickType, time, price,
+                            size, tickAttribLast, exchange, specialConditions));
+        }
     }
 
     /**
-     * @param i
-     * @param l
-     * @param v
-     * @param v1
-     * @param decimal
-     * @param decimal1
+     *
+     * @param reqId
+     * @param time
+     * @param bidPrice
+     * @param askPrice
+     * @param bidSize
+     * @param askSize
      * @param tickAttribBidAsk
      */
     @Override
-    public void tickByTickBidAsk(int i, long l, double v, double v1, Decimal decimal, Decimal decimal1, TickAttribBidAsk tickAttribBidAsk) {
+    public void tickByTickBidAsk(int reqId,
+                                 long time,
+                                 double bidPrice,
+                                 double askPrice,
+                                 Decimal bidSize,
+                                 Decimal askSize,
+                                 TickAttribBidAsk tickAttribBidAsk) {
 
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new TickByTickBidAskData(reqId, time, bidPrice, askPrice,
+                    bidSize, askSize, tickAttribBidAsk));
+            zmqServerHandler.send("TickByTickBidAsk", json);
+        } else {
+            System.out.println("TickByTickBidAsk:" +
+                    EWrapperMsgGenerator.tickByTickBidAsk(reqId, time, bidPrice, askPrice,
+                            bidSize, askSize, tickAttribBidAsk));
+        }
     }
 
+
     /**
-     * @param i
-     * @param l
-     * @param v
+     *
+     * @param reqId
+     * @param time
+     * @param midPoint
      */
     @Override
-    public void tickByTickMidPoint(int i, long l, double v) {
-
+    public void tickByTickMidPoint(int reqId, long time, double midPoint) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new TickByTickMidPointData(reqId, time, midPoint));
+            zmqServerHandler.send("TickByTickMidPoint", json);
+        } else {
+            System.out.println("TickByTickMidPoint: " +
+                    EWrapperMsgGenerator.tickByTickMidPoint(reqId, time, midPoint));
+        }
     }
 
+
     /**
-     * @param l
-     * @param i
-     * @param i1
+     *
+     * @param orderId
+     * @param apiClientId
+     * @param apiOrderId
      */
     @Override
-    public void orderBound(long l, int i, int i1) {
-
+    public void orderBound(long orderId, int apiClientId, int apiOrderId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("OrderBound",
+                    Long.toString(orderId) + "," + Integer.toString(apiClientId) + "," + Integer.toString(apiOrderId));
+        } else {
+            System.out.println("OrderBound: " +
+                    EWrapperMsgGenerator.orderBound(orderId, apiClientId, apiOrderId));
+        }
     }
 
     /**
@@ -1155,7 +1505,14 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void completedOrder(Contract contract, Order order, OrderState orderState) {
-
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new CompletedOrderData(contract, order, orderState));
+            zmqServerHandler.send("CompletedOrder", json);
+        } else {
+            System.out.println("CompletedOrder: " +
+                    EWrapperMsgGenerator.completedOrder(contract, order, orderState));
+        }
     }
 
     /**
@@ -1163,16 +1520,24 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void completedOrdersEnd() {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("CompletedOrdersEnd", "");
+        } else {
+            System.out.println("CompletedOrdersEnd");
+        }
     }
 
     /**
-     * @param i
+     * @param reqId
      * @param s
      */
     @Override
-    public void replaceFAEnd(int i, String s) {
-
+    public void replaceFAEnd(int reqId, String s) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("ReplaceFAEnd", Integer.toString(reqId) + "," + s);
+        } else {
+            System.out.println("ReplaceFAEnd: " + reqId + "," + s);
+        }
     }
 
     /**
@@ -1181,37 +1546,58 @@ public class TWSWrapperImpV1 implements EWrapper {
      */
     @Override
     public void wshMetaData(int i, String s) {
-
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("WshMetaData", Integer.toString(i) + "," + s);
+        } else {
+            System.out.println("WshMetaData: " + i + "," + s);
+        }
     }
 
     /**
-     * @param i
-     * @param s
+     * @param requestId
+     * @param requestId
      */
     @Override
-    public void wshEventData(int i, String s) {
+    public void wshEventData(int requestId, String dataJson) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("WshEventData", Integer.toString(requestId) + "," + dataJson);
+        } else {
+            System.out.println("WshEventData: " + requestId + "," + dataJson);
+        }
+    }
 
+
+    /**
+     *
+     * @param reqId
+     * @param startDateTime
+     * @param endDateTime
+     * @param timeZone
+     * @param sessions
+     */
+    @Override
+    public void historicalSchedule(int reqId, String startDateTime, String endDateTime, String timeZone, List sessions) {
+        if (zmqServerHandler != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(new HistoricalScheduleData(reqId, startDateTime, endDateTime, timeZone, sessions));
+            zmqServerHandler.send("HistoricalSchedule", json);
+        } else {
+            System.out.println("HistoricalSchedule: " +
+                    EWrapperMsgGenerator.historicalSchedule(reqId, startDateTime, endDateTime, timeZone, sessions));
+        }
     }
 
     /**
-     * @param i
-     * @param s
-     * @param s1
-     * @param s2
-     * @param list
+     * @param reqId
+     * @param whiteBrandingId
      */
     @Override
-    public void historicalSchedule(int i, String s, String s1, String s2, List<HistoricalSession> list) {
-
-    }
-
-    /**
-     * @param i
-     * @param s
-     */
-    @Override
-    public void userInfo(int i, String s) {
-
+    public void userInfo(int reqId, String whiteBrandingId) {
+        if (zmqServerHandler != null) {
+            zmqServerHandler.send("UserInfo", Integer.toString(reqId) + "," + whiteBrandingId);
+        } else {
+            System.out.println("UserInfo: " + reqId + "," + whiteBrandingId);
+        }
     }
 }
 
