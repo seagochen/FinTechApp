@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orlando's Blog</title>
+
+    <!-- This is for Chinese characters -->
+    <meta charset="utf-8"> 
+    <!-- This is for responsive design, always keep the width of the page as the width of the device -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Use bootstrap both CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    
+    <!-- Use fontawesome 5.15.1 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+	
+    <!-- Load markdown-js module -->
+    <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
+
+    <!-- If user use a phone, the content of Markdown should fit the width of the device,
+        else the content of Markdown should be 80% of the width of the device -->
+    <style>
+        @media only screen and (max-width: 600px) {
+            mobile-width {
+                width: 100%;
+                margin:0 auto;
+            }
+        }
+
+        /* This is for the width of the device is larger than 600px */
+        desktop-width {
+            width: 80%;
+            margin:0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- This is the navigation bar, which is fixed on the top of the page, and the background color is white -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                Orlando's Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="./index.html" class="nav-link" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a href="./catalog.html" class="nav-link active">Catalog</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Display a markdown file here -->
+    <div class="container">
+        <div class="row">
+            <!-- Display the content and fill the whole page when detected a mobile device -->
+            <div class="col-12">
+                <!-- This is the content of the markdown file -->
+                <div class="mobile-width" id="mdcontainer" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Add a footer, but display nothing -->
+    <div class="container">
+        <div class="row">
+            <div  class="container-fluid" style="padding: 5px; margin-top: 20px; text-align: center;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to the top of the page -->
+    <button id="scrollUp" type="button" class="btn btn-primary btn-floating btn-lg"
+        style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; opacity:0.1"
+        onclick="topFunction()"
+        onmouseover="onMouseOver()"
+        onmouseout="onMouseOut()">
+        <i class="fas fa-arrow-up"></i> 
+    </button>
+</body>
+
+<script>
+    // When mouse is over the button, the button should be opaque
+    function onMouseOver() {
+        // if the user use a mobile device, we do nothing
+        if (window.innerWidth <= 600) {
+            return;
+        } else {
+            document.getElementById("scrollUp").style.opacity = "1";
+        }
+    }
+
+    // When mouse is out of the button, the button should be transparent
+    function onMouseOut() {
+        // if the user use a mobile device, we do nothing
+        if (window.innerWidth <= 600) {
+            return;
+        } else {
+            document.getElementById("scrollUp").style.opacity = "0.1";
+        }
+    }
+
+    // topFunction() is used to jump to the top of the page
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+    // Get the markdown file name from the URL
+    function getQuery(key) {
+        var query = window.location.search.substring(1);
+        var key_values = query.split("&");
+        var params = {};
+        key_values.map(function (key_val) {
+            var key_val_arr = key_val.split("=");
+            params[key_val_arr[0]] = key_val_arr[1];
+        });
+        if (typeof params[key] != "undefined") {
+            return params[key];
+        }
+        return "";
+    }
+
+    window.onload = function () {
+        md = document.createElement("zero-md")
+        md.setAttribute("src", getQuery("src"))
+        md.setAttribute("no-shadow", "")
+        document.getElementById("mdcontainer").append(md)
+    }
+</script>
+</html>

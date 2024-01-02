@@ -9,6 +9,18 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
+
 export class AppComponent {
-  title = 'AngularApp';
+  public title_h1 = 'Fuck you!';
+  public title_h2 = "Fuck you again!";
+
+  // public image_url = "assets/new_logo.svgz"
+  public image_url = "assets/profile.png"
+
+  // onClick event
+  public onClick() {
+    // console show hello world
+    console.log("Hello wolrd!");
+  }
 }
