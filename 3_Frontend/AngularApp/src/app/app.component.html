@@ -1,8 +1,18 @@
 <h1>hello, {{title_h1}}</h1>
 <h2>This is {{title_h2}}</h2>
 <!--<img [src]="image_url" alt="img" />-->
-<img bind-src="image_url" alt="img" />
+<!--<img bind-src="image_url" alt="img" />-->
 
 <br>
 
-<button (click)="onClick()">Click me</button>
+<!--<button (click)="onClick()">Click me</button>-->
+
+<button (click)="openModal()">Open Modal</button>
+
+<!-- Modal HTML (hidden initially) -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Some text in the Modal..</p>
+  </div>
+</div>
