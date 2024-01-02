@@ -15,30 +15,13 @@ export class AppComponent {
   public title_h1 = 'Fuck you!';
   public title_h2 = "Fuck you again!";
 
-  // public image_url = "assets/new_logo.svgz"
-  // public image_url = "assets/profile.png"
-
-  openModal() {
-    $('#myModal').show();
+  onCloseModal() {
+    console.log("modal has been closed");
+    $('#exampleModal').modal('hide');  // Optional: if you want to close modal programmatically
   }
 
-  ngOnInit() {
-    // When the user clicks on <span> (x), close the modal
-    $('.close').on('click', function() {
-      $('#myModal').hide();
-    });
-
-    // When the user clicks anywhere outside the modal, close it
-    $(window).on('click', function(event: { target: any; }) {
-      if ($(event.target).is('#myModal')) {
-        $('#myModal').hide();
-      }
-    });
+  onSaveChanges() {
+    console.log("data saved");
+    $('#exampleModal').modal('hide');  // Optional: close modal after saving changes
   }
-
-  // // onClick event
-  // public onClick() {
-  //   // console show hello world
-  //   console.log("Hello wolrd!");
-  // }
 }
