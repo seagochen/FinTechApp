@@ -6,7 +6,6 @@
   position: relative;
   height: 100%;
   width: 100%;
-  /*overflow: hidden; !* 对于背景图片也设置为hidden，以防万一 *!*/
 }
 
 .clock {
