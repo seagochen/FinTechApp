@@ -5,15 +5,3 @@ html, body {
   padding: 0;
   overflow: hidden;
 }
-
-.bg-image {
-  background-image: url('./assets/imgs/background.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: hidden; /* 对于背景图片也设置为hidden，以防万一 */
-}
-

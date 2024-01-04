@@ -1,82 +1,51 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>AngularApp</title>
-    <base href="/">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<head>
+  <meta charset="utf-8">
+  <title>AngularApp</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Bootstrap JS and its dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Fontawesome 5.15.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
 
-    <!-- Use fontawesome 5.15.1 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+<body>
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Orlando's Blog</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <!-- Use Clock.js to display a clock -->
-    <script src="./assets/js/digital_clock.js"></script>
-  </head>
-  <body>
-    <!-- This is the navigation bar, which is fixed on the top of the page, and the background color is white -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          Orlando's Blog
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="nav nav-pills">
-            <li class="nav-item"><a href="./index.html" class="nav-link active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="./projects.html" class="nav-link">Projects</a></li>
-            <li class="nav-item"><a href="./resume.html" class="nav-link">Resume</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Use an image as background, and fit the image to the width and height of the screen -->
-<!--    <div class="bg-image" style="background-image: url('./assets/imgs/background.png'); height: 95vh; background-position: center; background-repeat: no-repeat; background-size: cover; position: relative;">-->
-    <div class="bg-image">
-      <!-- Display the Angular app here -->
-      <div>
-        <app-root></app-root>
-      </div>
-
-      <!-- Display a clock in the bottom right corner -->
-      <div id="MyClockDisplay" class="clock" style="color: white; font-size: 40px; position: absolute; top: 90%; left: 90%; transform: translate(-50%, -50%); z-index: 2;"></div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/ledger-keeper">Ledger Keeper</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/resume">Resume</a>
+        </li>
+      </ul>
     </div>
+  </div>
+</nav>
 
-  </body>
+<!-- Angular app root -->
+<app-root></app-root>
 
-  <!-- When page is loaded, the clock will be displayed -->
-  <script type="text/javascript">
-
-    // when the user uses a mobile device, the clock will be hidden
-    if (window.innerWidth < 768) {
-      document.getElementById("MyClockDisplay").style.display = "none";
-    } else {
-      document.getElementById("MyClockDisplay").style.display = "block";
-    }
-
-    // when the user resizes the window, the clock will be hidden
-    window.addEventListener("resize", function() {
-      if (window.innerWidth < 768) {
-        document.getElementById("MyClockDisplay").style.display = "none";
-      } else {
-        document.getElementById("MyClockDisplay").style.display = "block";
-      }
-    });
-
-    // show the clock
-    window.onload = showTime();
-  </script>
+<!-- Bootstrap JS and its dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>

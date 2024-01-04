@@ -1,41 +1,30 @@
-<!-- White text floating in the middle of the screen -->
-<div class="bg-text" style="color: white; font-size: 40px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;">
-  <h1>Hey, here you are!</h1>
-  <p>NECESSITAS EST INGENII MATER!</p>
 
-  <!-- This is the button, in the middle of the screen -->
-  <div class="container">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-      <!-- The button will link to the projects page -->
-      <a href="./catalog.html" class="btn btn-primary me-md-2" type="button">Learn More</a>
+<!-- Use an image as background, and fit the image to the width and height of the screen -->
+<div class="bg-home">
+
+  <!-- White text floating in the middle of the screen -->
+  <div class="bg-text" style="color: white; font-size: 40px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;">
+    <h1>Hey, here you are!</h1>
+    <p>NECESSITAS EST INGENII MATER!</p>
+
+    <!-- This is the button, in the middle of the screen -->
+    <div class="container">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <!-- The button will link to the projects page -->
+        <a href="./catalog.html" class="btn btn-primary me-md-2" type="button">Learn More</a>
+      </div>
     </div>
   </div>
+
+  <!-- Display a clock in the bottom right corner -->
+  <!--  <div id="MyClockDisplay" class="clock" style="color: white; font-size: 40px; position: absolute; top: 90%; left: 90%; transform: translate(-50%, -50%); z-index: 2;"></div>-->
+  <!-- Display a clock in the bottom right corner -->
+  <!--  <div *ngIf="displayClock" id="MyClockDisplay" class="clock"-->
+  <!--       style="color: white; font-size: 40px; position: absolute; top: 90%; left: 90%; transform: translate(-50%, -50%); z-index: 2;"></div>-->
+
+  <!-- Display a clock in the bottom right corner -->
+  <div *ngIf="displayClock" id="MyClockDisplay" class="clock">
+    {{ time }}
+  </div>
+
 </div>
-
-<!--&lt;!&ndash; Button to trigger modal &ndash;&gt;-->
-<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-<!--  Launch demo modal-->
-<!--</button>-->
-
-<!--&lt;!&ndash; Modal &ndash;&gt;-->
-<!--<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--  <div class="modal-dialog">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header">-->
-<!--        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
-<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseModal()">-->
-<!--          <span aria-hidden="true">&times;</span>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div class="modal-body">-->
-<!--        ...-->
-<!--      </div>-->
-<!--      <div class="modal-footer">-->
-<!--        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseModal()">Close</button>-->
-<!--        <button type="button" class="btn btn-primary" (click)="onSaveChanges()">Save changes</button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-
