@@ -1,7 +1,7 @@
 import React from "react";
 
-function Error() {
+function Error505() {
     return <h1>Page not found!</h1>
 };
 
-export default Error;
+export default Error505;
