@@ -1,17 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-// Import BackgroundStyle with PascalCase
+// Import BackgroundStyle
 import BackgroundStyle from "./BackgroundStyle";
 
-function Error404() {
+function Error500() {
     // Define the URL for the background image
     const backgroundImageUrl = "/assets/imgs/error404.png";
 
     return (
         // Use BackgroundStyle with PascalCase
         <BackgroundStyle backgroundImageUrl={backgroundImageUrl}>
-            <h1>404, Page Not Found!</h1>
+            <h1>505, Page Not Found!</h1>
             <p>Audentes Fortuna Iuvat!</p>
             <div className="container">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -20,6 +20,6 @@ function Error404() {
             </div>
         </BackgroundStyle>
     );
-};
+}
 
-export default Error404;
+export default Error500;
