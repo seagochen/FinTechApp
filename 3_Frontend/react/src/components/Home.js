@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import Clock from "./DigitalClock";
 
 const homeStyles = {
     bgHome: {
@@ -19,17 +20,6 @@ const homeStyles = {
         transform: 'translate(-50%, -50%)',
         zIndex: 2,
     },
-    clock: {
-        color: 'white', /* 白色字体以便在深色背景上看起来更清晰 */
-        fontSize: '40px', /* 字体大小 */
-        position: 'fixed', /* 固定位置，不随滚动条滚动 */
-        bottom: '20px', /* 距离底部20px */
-        right: '20px', /* 距离右侧20px */
-        backgroundColor: 'rgba(0, 0, 0, 0.3)', /* 背景半透明黑色，增加对比度 */
-        padding: '10px', /* 内边距 */
-        borderRadius: '10px', /* 边角圆润 */
-        zIndex: '1000' /* 高层次，确保不被其他元素遮挡 */
-    }
 }
 
 
@@ -86,20 +76,16 @@ function Home() {
             <div style={homeStyles.bgText}>
                 <h1>Hey, here you are!</h1>
                 <p>NECESSITAS EST INGENII MATER!</p>
-                <div className="container">
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                        <a href="./catalog.html" className="btn btn-primary me-md-2" type="button">
-                            Learn More
-                        </a>
-                    </div>
-                </div>
+                {/*<div className="container">*/}
+                {/*    <div className="d-grid gap-2 d-md-flex justify-content-md-center">*/}
+                {/*        <a href="./catalog.html" className="btn btn-primary me-md-2" type="button">*/}
+                {/*            Learn More*/}
+                {/*        </a>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
 
-            {displayClock && (
-                <div id="MyClockDisplay" style={homeStyles.clock}>
-                    {time}
-                </div>
-            )}
+            <Clock /> {/* Use the Clock component */}
         </div>
     );
 }
