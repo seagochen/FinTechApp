@@ -1,42 +1,40 @@
 from AccountsModel import AccountsModel
 
 
-class ModelFactory:
-    def get_model(self, model_type, db_path):
-        if model_type == 'Accounts':
-            return AccountsModel(db_path)
-        # 可以根据需要添加其他表的处理逻辑
-        else:
-            raise ValueError("Unknown model type")
+def get_model(model_type, db_path):
+    if model_type == 'Accounts':
+        return AccountsModel(db_path)
+    # 可以根据需要添加其他表的处理逻辑
+    else:
+        raise ValueError("Unknown model type")
 
 
 if __name__ == '__main__':
-    # 创建工厂和模型实例
-    factory = ModelFactory()
-    model = factory.get_model('Accounts', r'..\utility\database.db')
+    from Controller import *
 
-    # 删除全部数据
-    model.delete_all()
+    # Get model from database
+    model = get_model('Accounts', r'..\utility\database.db')
 
-    # 示例：添加账户
-    model.add(
-        "(AccountId, ServiceProviderId, AccountName, AccountTypeId, AccountPassword, RestrictionId, Note)",
-        ('id1', 1, 'Account1', 1, 'password', 1, 'Note'))
+    # 添加账户
+    new_account = AccountsModel(r'..\utility\database.db', 'id1', 1, 'Account1', 1, 'password', 1, 'Note')
+    add(new_account)
 
-    # 示例：查询账户
-    print(model.get("AccountId", "id1"))
+    # 查询账户
+    print(get(new_account))
 
-    # 示例：更新账户
-    model.update("AccountId", "id1",
-                 "ServiceProviderId = ?, AccountName = ?, AccountTypeId = ?, AccountPassword = ?, "
-                 "RestrictionId = ?, Note = ?",
-                 (2, 'NewAccount', 2, 'newpassword', 2, 'New note'))
+    # 更新账户
+    new_account.update_from_dict({
+        "ServiceProviderId": 2,
+        "AccountName": "NewAccount",
+        "AccountTypeId": 2,
+        "AccountPassword": "newpassword",
+        "RestrictionId": 2,
+        "Note": "New Note"
+    })
+    update(new_account)
 
-    # 查询
-    print(model.get("AccountId", "id1"))
+    # 查询更新后的账户
+    print(get(new_account))
 
-    # 示例：删除账户
-    model.delete("AccountId", "id1")
-
-    # 显示全部数据
-    print(model.get_all())
+    # 删除账户
+    delete(new_account)

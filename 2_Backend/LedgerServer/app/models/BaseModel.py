@@ -1,4 +1,10 @@
+import re
 import sqlite3
+
+
+def camel_to_snake(name):
+    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
 
 
 class BaseModel:
@@ -6,46 +12,31 @@ class BaseModel:
         self.conn = sqlite3.connect(db_path)
         self.table_name = table_name
 
-    def add(self, fields, values):
-        with self.conn:
-            self.conn.execute(f"INSERT INTO {self.table_name} {fields} VALUES ({', '.join('?' * len(values))})", values)
-
-    def get(self, field, value):
-        cur = self.conn.cursor()
-        cur.execute(f"SELECT * FROM {self.table_name} WHERE {field} = ?", (value,))
-        return cur.fetchall()
-
-    def update(self, identifier, id_value, fields, new_values):
-        with self.conn:
-            self.conn.execute(f"UPDATE {self.table_name} SET {fields} WHERE {identifier} = ?", new_values + (id_value,))
-
-    def delete(self, field, value):
-        with self.conn:
-            self.conn.execute(f"DELETE FROM {self.table_name} WHERE {field} = ?", (value,))
-
-    def get_all(self):
-        results = self.command(f"SELECT * FROM {self.table_name}")
-        if len(results) is not None:
-            return results
-        else:
-            return []
-
-    def delete_all(self):
-        self.command(f"DELETE FROM {self.table_name}")
-
-    def command(self, command, values=None):
+    def query(self, command, values=None):
         with self.conn:
             cur = self.conn.cursor()
             if values:
-                cur.execute(command, values)
+                res = cur.execute(command, values)
             else:
-                cur.execute(command)
+                res = cur.execute(command)
 
             if 'SELECT' in command.upper():
                 return cur.fetchall()
             else:
                 self.conn.commit()
-                return None
+                return res
+
+    def update_from_dict(self, update_dict):
+        for key, value in update_dict.items():
+            snake_key = camel_to_snake(key)
+            if hasattr(self, snake_key):
+                setattr(self, snake_key, value)
+
+    def to_dict(self):
+        return {}
 
     def __del__(self):
         self.conn.close()
+
+    def __dict__(self):
+        return self.to_dict()
