@@ -1,4 +1,4 @@
-from BaseModel import BaseModel
+from app.models.BaseModel import BaseModel
 
 
 def add(model: BaseModel):
@@ -16,21 +16,19 @@ def get_all(model: BaseModel):
 
 
 def get(model: BaseModel):
-    return model.query(f"SELECT * FROM {model.table_name} WHERE AccountId = ?", (model.account_id,))
+    return model.query(f"SELECT * FROM {model.table_name} WHERE {model.primary_key} = ?",
+                       (model.primary_val,))
 
 
 def update(model: BaseModel):
     set_clause = ", ".join([f"{key} = ?" for key in model.to_dict().keys()])
     values = tuple(model.to_dict().values())
-    res = model.query(f"UPDATE {model.table_name} SET {set_clause} WHERE AccountId = ?",
-                      values + (model.account_id,))
-
-    print(f"UPDATE {model.table_name} SET {set_clause} WHERE AccountId = ?")
-    print(values)
+    model.query(f"UPDATE {model.table_name} SET {set_clause} WHERE {model.primary_key} = ?",
+                values + (model.primary_val,))
 
 
 def delete(model: BaseModel):
-    model.query(f"DELETE FROM {model.table_name} WHERE AccountId = ?", (model.account_id,))
+    model.query(f"DELETE FROM {model.table_name} WHERE {model.primary_key} = ?", (model.primary_val,))
 
 
 def delete_all(model: BaseModel):

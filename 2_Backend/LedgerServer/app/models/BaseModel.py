@@ -8,23 +8,28 @@ def camel_to_snake(name):
 
 
 class BaseModel:
-    def __init__(self, db_path, table_name):
+    def __init__(self, db_path, table_name, primary_key=None, primary_val=None):
         self.conn = sqlite3.connect(db_path)
         self.table_name = table_name
+        self.primary_key = primary_key
+        self.primary_val = primary_val
 
     def query(self, command, values=None):
-        with self.conn:
-            cur = self.conn.cursor()
-            if values:
-                res = cur.execute(command, values)
-            else:
-                res = cur.execute(command)
+        try:
+            with self.conn:
+                cur = self.conn.cursor()
+                if values:
+                    cur.execute(command, values)
+                else:
+                    cur.execute(command)
 
-            if 'SELECT' in command.upper():
-                return cur.fetchall()
-            else:
-                self.conn.commit()
-                return res
+                if 'SELECT' in command.upper():
+                    return cur.fetchall()
+                else:
+                    self.conn.commit()
+                    return "Query executed successfully"
+        except sqlite3.Error as e:
+            return f"An error occurred: {e}"
 
     def update_from_dict(self, update_dict):
         for key, value in update_dict.items():
@@ -32,11 +37,24 @@ class BaseModel:
             if hasattr(self, snake_key):
                 setattr(self, snake_key, value)
 
+            # Update primary key
+            if self.primary_key == key:
+                self.primary_val = value
+
     def to_dict(self):
         return {}
+
+    def close(self):
+        self.conn.close()
 
     def __del__(self):
         self.conn.close()
 
     def __dict__(self):
         return self.to_dict()
+
+    def __str__(self):
+        return str(self.__dict__())
+
+    def __len__(self):
+        return len(self.__dict__())

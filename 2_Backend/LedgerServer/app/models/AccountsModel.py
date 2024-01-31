@@ -1,10 +1,11 @@
-from BaseModel import BaseModel
+from app.models.BaseModel import BaseModel
+from app.utility.DownloadSqlScript import DATABASE_NAME
 
 
 class AccountsModel(BaseModel):
-    def __init__(self, db_path, account_id=None, service_provider_id=None, account_name=None,
+    def __init__(self, db_path=DATABASE_NAME, account_id=None, service_provider_id=None, account_name=None,
                  account_type_id=None, account_password=None, restriction_id=None, note=None):
-        super().__init__(db_path, 'Accounts')
+        super().__init__(db_path, 'Accounts', 'AccountId', account_id)
         self.account_id = account_id
         self.service_provider_id = service_provider_id
         self.account_name = account_name
@@ -23,3 +24,12 @@ class AccountsModel(BaseModel):
             "RestrictionId": self.restriction_id,
             "Note": self.note
         }
+
+    # def update_from_tuplet(self, tuplet):
+    #     (self.account_id,
+    #      self.service_provider_id,
+    #      self.account_name,
+    #      self.account_type_id,
+    #      self.account_password,
+    #      self.restriction_id,
+    #      self.note) = tuplet
