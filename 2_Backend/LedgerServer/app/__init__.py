@@ -2,7 +2,7 @@ from flask import Flask
 # from flask_sqlalchemy import SQLAlchemy
 
 # Register the views
-from app import Views
+from app import SampleViews
 
 
 # db = SQLAlchemy()
@@ -18,7 +18,7 @@ def create_app(config_filename):
     # db.init_app(app)
 
     # Register blueprint
-    from app.Views import bp
+    from app.SampleViews import bp
     app.register_blueprint(bp)
 
     # with app.app_context():
