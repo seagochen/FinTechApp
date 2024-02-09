@@ -4,6 +4,7 @@ import os
 
 GITHUB_CREATION_URL = "https://raw.githubusercontent.com/seagochen/FinTechApp/master/1_Database/create_db.sql"
 GITHUB_UPDATEVIEW_URL = "https://raw.githubusercontent.com/seagochen/FinTechApp/master/1_Database/create_account_view.sql"
+GITHUB_TRIGGER_URL = "https://raw.githubusercontent.com/seagochen/FinTechApp/master/1_Database/trigger_record_logs.sql"
 DATABASE_NAME = "database.db"
 
 
