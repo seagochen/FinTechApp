@@ -15,23 +15,6 @@ def _load_from_stream(fs):
     return data
 
 
-def _save_tmps(files):
-    from databases import get_redis
-    redis = get_redis()
-
-    # push file to redis
-    json = {}
-    for attr, val in files.items():
-        # add records to json
-        json[val.filename] = md5(val.filename)
-
-        # push data to redis
-        data = _load_from_stream(val)
-        redis.set_variable(md5(val.filename), data, 120)
-
-    return json
-
-
 def get_request_params(request):
     params = {}
 
@@ -73,7 +56,7 @@ def get_request_params(request):
 
     # adding files to redis
     if len(request.files) > 0:
-        params['files'] = _save_tmps(request.files)
+        params['files'] = request.files
     else:
         params['files'] = None
 
