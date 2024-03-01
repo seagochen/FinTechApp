@@ -6,8 +6,9 @@ from app import HttpRespond
 from app import RequestParams
 from app.HttpRespond import HTTP_STATUS
 from app.utility.DownloadSqlScript import *
+from app.utility.FileConfigHandler import *
 
-ledger_service = Blueprint('ledger_service', __name__, url_prefix='/ledger_service')
+ledger_blueprint = Blueprint('ledger_service', __name__, url_prefix='/ledger_service')
 
 
 def create_sqlite_database():
@@ -27,7 +28,7 @@ def create_sqlite_database():
     execute_script("trigger_table.sql", database=DATABASE_NAME)
 
 
-@ledger_service.route('/setup', methods=['GET'])
+@ledger_blueprint.route('/setup', methods=['GET'])
 def setup():
     # Processing GET request
     params = RequestParams.get_request_params(request)
@@ -47,21 +48,21 @@ def setup():
     return jsonify(HttpRespond.response(HTTP_STATUS.CERR_Bad_Request, "No method specified"))
 
 
-@ledger_service.route('/accounts', methods=['GET'])
+@ledger_blueprint.route('/accounts', methods=['GET'])
 def accounts():
     return jsonify(HttpRespond.response(HTTP_STATUS.CERR_Bad_Request, "No method specified"))
 
 
-@ledger_service.route('/accounts/restriction_opts', methods=['GET'])
+@ledger_blueprint.route('/accounts/restriction_opts', methods=['GET'])
 def accounts_restriction_opts():
     return jsonify(HttpRespond.response(HTTP_STATUS.CERR_Bad_Request, "No method specified"))
 
 
-@ledger_service.route('/accounts/account_type_opts', methods=['GET'])
+@ledger_blueprint.route('/accounts/account_type_opts', methods=['GET'])
 def accounts_account_type_opts():
     return jsonify(HttpRespond.response(HTTP_STATUS.CERR_Bad_Request, "No method specified"))
 
 
-@ledger_service.route('/accounts/service_providers_opts', methods=['GET'])
+@ledger_blueprint.route('/accounts/service_providers_opts', methods=['GET'])
 def accounts_service_providers_opts():
     return jsonify(HttpRespond.response(HTTP_STATUS.CERR_Bad_Request, "No method specified"))
