@@ -1,0 +1,48 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.23'
+}
+
+group = 'com.seagosoft.tws'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // JeroMQ
+    implementation 'org.zeromq:jeromq:0.5.2'
+
+    // Log4J
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Include all JAR files in the libs directory
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+tasks.withType(KotlinCompile) {
+    kotlinOptions {
+        freeCompilerArgs += '-Xjsr305=strict'
+        jvmTarget = '17'
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
