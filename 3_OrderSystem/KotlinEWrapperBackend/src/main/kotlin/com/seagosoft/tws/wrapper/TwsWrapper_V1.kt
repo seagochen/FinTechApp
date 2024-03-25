@@ -1,15 +1,10 @@
 package com.seagosoft.tws.wrapper
 
-// Import TWS API classes
-
 // Import ZeroMQ classes
 import com.seagosoft.tws.zeromq.ZeroMQServer
 
-
-// Import Gson classes
-import com.google.gson.Gson
+// Import IB classes
 import com.ib.client.*
-
 
 // Kotlin class wrapper for TWS EWrapper interface
 class TwsWrapper_V1 (twsServer: String, twsPort: Int, zeromqPort: Int): EWrapper {
@@ -34,6 +29,9 @@ class TwsWrapper_V1 (twsServer: String, twsPort: Int, zeromqPort: Int): EWrapper
         zeromqServer?.start() ?: run {
             println("ZeroMQ server not started")
         }
+
+        // Print a message to the console
+        println("TwsWrapper_V1 initialized")
     }
 
 

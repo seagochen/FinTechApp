@@ -19,8 +19,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // JeroMQ
@@ -31,6 +31,9 @@ dependencies {
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // TOM4J
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 
     // Include all JAR files in the libs directory
     implementation fileTree(dir: 'libs', include: ['*.jar'])
