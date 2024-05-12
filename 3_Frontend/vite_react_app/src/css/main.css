@@ -1,0 +1,7 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;  // 防止横向滚动
+    height: 100%;        // 确保html和body元素填满整个视口高度
+    width: 100%;         // 确保html和body元素填满整个视口宽度
+}
